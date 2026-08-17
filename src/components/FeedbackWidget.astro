@@ -1,0 +1,193 @@
+---
+---
+
+<div class="feedback-widget" data-feedback-widget>
+	<button type="button" class="feedback-widget__trigger" aria-haspopup="dialog" aria-expanded="false">
+		Feedback
+	</button>
+
+	<div class="feedback-widget__panel" role="dialog" aria-label="Send feedback" hidden>
+		<form class="feedback-widget__form">
+			<fieldset class="feedback-widget__type">
+				<legend>What's this about?</legend>
+				<label><input type="radio" name="type" value="Suggestion" checked /> Suggestion</label>
+				<label><input type="radio" name="type" value="Bug" /> Bug</label>
+				<label><input type="radio" name="type" value="Question" /> Question</label>
+			</fieldset>
+
+			<label class="feedback-widget__field">
+				<span>Email <em>(optional)</em></span>
+				<input type="email" name="email" autocomplete="email" />
+			</label>
+
+			<label class="feedback-widget__field">
+				<span>Message</span>
+				<textarea name="message" required rows="4"></textarea>
+			</label>
+
+			<div class="feedback-widget__actions">
+				<button type="button" class="feedback-widget__cancel">Cancel</button>
+				<button type="submit">Send</button>
+			</div>
+		</form>
+
+		<div class="feedback-widget__confirmation" hidden>
+			<p>Thanks — we've got it.</p>
+		</div>
+	</div>
+</div>
+
+<style>
+	.feedback-widget {
+		position: fixed;
+		right: var(--space-3);
+		bottom: var(--space-3);
+		z-index: 40;
+	}
+
+	.feedback-widget__trigger {
+		background: var(--color-accent-warm);
+		border: none;
+		border-radius: 999px;
+		color: var(--color-bg);
+		cursor: pointer;
+		font-size: 0.9rem;
+		font-weight: 600;
+		padding: 0.75rem 1.25rem;
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+	}
+
+	.feedback-widget__panel {
+		position: absolute;
+		right: 0;
+		bottom: calc(100% + var(--space-1));
+		background: var(--color-surface-alt);
+		border-radius: var(--radius-card);
+		padding: var(--space-3);
+		width: min(20rem, 90vw);
+		box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+	}
+
+	.feedback-widget__form {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2);
+	}
+
+	.feedback-widget__type {
+		border: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+		font-size: 0.9rem;
+	}
+
+	.feedback-widget__type legend {
+		font-size: 0.875rem;
+		margin-bottom: 0.25rem;
+		padding: 0;
+	}
+
+	.feedback-widget__field {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+		font-size: 0.875rem;
+	}
+
+	.feedback-widget__field em {
+		opacity: 0.7;
+		font-style: normal;
+	}
+
+	.feedback-widget__field input,
+	.feedback-widget__field textarea {
+		background: var(--color-bg);
+		border: 1px solid color-mix(in srgb, var(--color-text-body) 25%, transparent);
+		border-radius: var(--radius-control);
+		color: var(--color-text-body);
+		padding: 0.6rem 0.7rem;
+		font-family: var(--font-body);
+		font-size: 0.95rem;
+	}
+
+	.feedback-widget__actions {
+		display: flex;
+		justify-content: flex-end;
+		gap: var(--space-1);
+	}
+
+	.feedback-widget__cancel {
+		background: transparent;
+		border: 1px solid color-mix(in srgb, var(--color-text-body) 25%, transparent);
+		border-radius: var(--radius-control);
+		color: var(--color-text-body);
+		cursor: pointer;
+		padding: 0.55rem 1rem;
+	}
+
+	.feedback-widget__actions button[type='submit'] {
+		background: var(--color-accent-strong);
+		border: none;
+		border-radius: var(--radius-control);
+		color: var(--color-bg);
+		cursor: pointer;
+		font-weight: 600;
+		padding: 0.55rem 1.1rem;
+	}
+
+	.feedback-widget__confirmation p {
+		font-size: 0.95rem;
+	}
+</style>
+
+<script>
+	import { submitFeedback } from '../lib/feedback';
+
+	const widget = document.querySelector<HTMLElement>('[data-feedback-widget]');
+	if (widget) {
+		const trigger = widget.querySelector<HTMLButtonElement>('.feedback-widget__trigger');
+		const panel = widget.querySelector<HTMLElement>('.feedback-widget__panel');
+		const form = widget.querySelector<HTMLFormElement>('.feedback-widget__form');
+		const confirmation = widget.querySelector<HTMLElement>('.feedback-widget__confirmation');
+		const cancelButton = widget.querySelector<HTMLButtonElement>('.feedback-widget__cancel');
+
+		function openPanel() {
+			panel?.removeAttribute('hidden');
+			trigger?.setAttribute('aria-expanded', 'true');
+		}
+
+		function closePanel() {
+			panel?.setAttribute('hidden', '');
+			trigger?.setAttribute('aria-expanded', 'false');
+			if (form) form.hidden = false;
+			if (confirmation) confirmation.hidden = true;
+			form?.reset();
+		}
+
+		trigger?.addEventListener('click', () => {
+			if (panel?.hasAttribute('hidden')) openPanel();
+			else closePanel();
+		});
+
+		cancelButton?.addEventListener('click', closePanel);
+
+		form?.addEventListener('submit', (event) => {
+			event.preventDefault();
+			const data = new FormData(form);
+
+			submitFeedback({
+				type: String(data.get('type') ?? 'Suggestion') as 'Suggestion' | 'Bug' | 'Question',
+				email: String(data.get('email') ?? '').trim(),
+				message: String(data.get('message') ?? '').trim(),
+				breadcrumb: window.location.href,
+			});
+
+			form.hidden = true;
+			if (confirmation) confirmation.hidden = false;
+			window.setTimeout(closePanel, 2500);
+		});
+	}
+</script>

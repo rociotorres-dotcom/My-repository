@@ -1,0 +1,253 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WaitlistForm from '../components/WaitlistForm.astro';
+import FeedbackWidget from '../components/FeedbackWidget.astro';
+
+const year = new Date().getFullYear();
+---
+
+<BaseLayout>
+	<header class="nav">
+		<!-- TODO P-114: typographic wordmark, provisional — replace with the real logo when Together Agency delivers it -->
+		<p class="wordmark">Gnome</p>
+		<a class="nav__cta" href="#waitlist-hero">Join the waitlist</a>
+	</header>
+
+	<main>
+		<section class="hero" id="hero">
+			<div class="hero__copy">
+				<h1>Managed like an investment. Easy as a companion.</h1>
+				<p class="hero__subtitle">
+					Gnome turns every receipt, repair, and project into a record that protects your basis,
+					backs your claims, and moves your value.
+				</p>
+				<p class="hero__body">
+					Financial-grade tracking, delivered with the ease of a capable friend who happens to
+					know houses and money.
+				</p>
+			</div>
+			<div class="hero__form" id="waitlist-hero">
+				<p class="hero__urgency">Early access · By invitation, starting with our founder circle.</p>
+				<WaitlistForm instanceId="hero" />
+			</div>
+		</section>
+
+		<section class="features">
+			<h2>What you'll get</h2>
+			<div class="features__grid">
+				<article class="feature-card">
+					<p class="feature-card__index">01</p>
+					<p class="feature-card__eyebrow">Know</p>
+					<h3>See it all, finally</h3>
+					<p>
+						Paint, equipment, documents, and cost basis — the whole home, legible for the first
+						time.
+					</p>
+				</article>
+
+				<article class="feature-card">
+					<p class="feature-card__index">02</p>
+					<p class="feature-card__eyebrow">Grow</p>
+					<h3>See it coming</h3>
+					<p>
+						Maintenance flagged before it's a liability. Improvements weighed by what they'll
+						actually return.
+					</p>
+				</article>
+
+				<article class="feature-card">
+					<p class="feature-card__index">03</p>
+					<p class="feature-card__eyebrow">Hand Off</p>
+					<h3>Built to be inherited</h3>
+					<p>
+						An insurance-ready report, a buyer-ready history, a record a new contractor — or an
+						heir — can pick up without starting blind.
+					</p>
+				</article>
+			</div>
+		</section>
+
+		<section class="bottom-cta">
+			<h2>Command, not chores.</h2>
+			<p>Reserve your spot. Gnome does the watching; every decision stays yours.</p>
+			<div id="waitlist-bottom">
+				<WaitlistForm instanceId="bottom" />
+			</div>
+		</section>
+	</main>
+
+	<footer class="footer">
+		<!-- TODO P-114: same provisional wordmark as the nav -->
+		<p class="wordmark">Gnome</p>
+		<p>&copy; {year} Gnome</p>
+		<p>TractionLab · Designli</p>
+	</footer>
+
+	<FeedbackWidget />
+</BaseLayout>
+
+<style>
+	main {
+		max-width: var(--max-width);
+		margin: 0 auto;
+	}
+
+	.nav {
+		position: sticky;
+		top: 0;
+		z-index: 30;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-2);
+		padding: var(--space-2) var(--space-3);
+		background: color-mix(in srgb, var(--color-bg) 92%, transparent);
+		backdrop-filter: blur(6px);
+		border-bottom: 1px solid color-mix(in srgb, var(--color-text-body) 12%, transparent);
+	}
+
+	.wordmark {
+		font-family: var(--font-display);
+		font-style: italic;
+		font-size: 1.35rem;
+	}
+
+	.nav__cta {
+		text-decoration: none;
+		font-size: 0.85rem;
+		font-weight: 600;
+		border: 1px solid var(--color-accent-warm);
+		border-radius: 999px;
+		padding: 0.5rem 1.1rem;
+		white-space: nowrap;
+	}
+
+	.hero {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: var(--space-4);
+		text-align: center;
+		padding: var(--space-6) var(--space-3);
+	}
+
+	.hero__copy {
+		max-width: 42rem;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2);
+	}
+
+	.hero h1 {
+		font-size: clamp(2rem, 4vw, 3.25rem);
+	}
+
+	.hero__subtitle {
+		font-size: 1.15rem;
+		color: var(--color-text-body);
+	}
+
+	.hero__body {
+		font-size: 1rem;
+		opacity: 0.85;
+	}
+
+	.hero__form {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: var(--space-1);
+		width: 100%;
+	}
+
+	.hero__urgency {
+		font-size: 0.8rem;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--color-accent-warm);
+	}
+
+	.features {
+		padding: var(--space-6) var(--space-3);
+	}
+
+	.features h2 {
+		font-size: 1.75rem;
+		text-align: center;
+		margin-bottom: var(--space-4);
+	}
+
+	.features__grid {
+		display: grid;
+		gap: var(--space-3);
+		grid-template-columns: 1fr;
+	}
+
+	@media (min-width: 700px) {
+		.features__grid {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+
+	.feature-card {
+		background: var(--color-surface-alt);
+		border-radius: var(--radius-card);
+		padding: var(--space-3);
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.feature-card__index {
+		font-family: var(--font-display);
+		font-size: 1.5rem;
+		opacity: 0.5;
+	}
+
+	.feature-card__eyebrow {
+		font-size: 0.75rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--color-accent-warm);
+	}
+
+	.feature-card h3 {
+		font-size: 1.25rem;
+	}
+
+	.feature-card p:not(.feature-card__index):not(.feature-card__eyebrow) {
+		opacity: 0.85;
+		font-size: 0.95rem;
+	}
+
+	.bottom-cta {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: var(--space-2);
+		text-align: center;
+		padding: var(--space-6) var(--space-3);
+		max-width: 40rem;
+		margin: 0 auto;
+	}
+
+	.bottom-cta h2 {
+		font-size: 2rem;
+	}
+
+	.footer {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.35rem;
+		padding: var(--space-4) var(--space-3);
+		font-size: 0.8rem;
+		opacity: 0.7;
+		text-align: center;
+	}
+
+	.footer .wordmark {
+		font-size: 1.1rem;
+		opacity: 1;
+	}
+</style>

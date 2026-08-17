@@ -1,0 +1,78 @@
+---
+import '../styles/tokens.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Gnome — Early Access',
+  description = 'Gnome is the asset-optimization platform that turns how well you keep your home into what it’s worth. Join early access.',
+} = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<meta name="description" content={description} />
+
+		<!-- TODO: remove at real public launch — this page is internal-preview only for now -->
+		<meta name="robots" content="noindex,nofollow" />
+
+		<!-- Open Graph — no domain/URL hardcoded here; P-002 not confirmed yet -->
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="Gnome" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>
+
+<style is:global>
+	* {
+		box-sizing: border-box;
+	}
+
+	html,
+	body {
+		margin: 0;
+		padding: 0;
+	}
+
+	body {
+		background: var(--color-bg);
+		color: var(--color-text-body);
+		font-family: var(--font-body);
+		line-height: 1.5;
+		-webkit-font-smoothing: antialiased;
+	}
+
+	h1,
+	h2,
+	h3 {
+		font-family: var(--font-display);
+		font-weight: 400;
+		line-height: 1.1;
+		margin: 0;
+	}
+
+	p {
+		margin: 0;
+	}
+
+	a {
+		color: inherit;
+	}
+
+	button {
+		font-family: var(--font-body);
+	}
+</style>

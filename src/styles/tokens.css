@@ -1,0 +1,47 @@
+/*
+  Design tokens — Gnome waitlist landing.
+
+  PROVISIONAL. Every value below is sampled by eye from the Together Agency
+  brand strategy deck (Aug 2026), not an official spec. Together Agency has
+  not delivered real hex codes, typefaces, or a logo yet (blocked on P-114).
+
+  This file exists so that when the real assets arrive, reskinning the page
+  is "edit this file" and nothing else. Do not hardcode any of these values
+  anywhere outside this file.
+*/
+
+:root {
+  /* TODO P-114 — near-black background, sampled from deck slide backgrounds. Not an official hex. */
+  --color-bg: #0e0e0e;
+
+  /* TODO P-114 — warm blush/tan accent, sampled from deck. Not an official hex. */
+  --color-accent-warm: #d5b49e;
+
+  /* TODO P-114 — off-white body text, sampled from deck. Not an official hex. */
+  --color-text-body: #e2ddd8;
+
+  /* TODO P-114 — warm grey alt surface (cards, dividers), sampled from deck. Not an official hex. */
+  --color-surface-alt: #605c5e;
+
+  /* TODO P-114 — coral strong accent (borders, CTA emphasis), sampled from deck. Not an official hex. */
+  --color-accent-strong: #ff595a;
+
+  /* TODO P-114 — high-contrast display serif placeholder. Together Agency will deliver the real
+     display typeface; this system stack is a stand-in with the right contrast/weight character. */
+  --font-display: Georgia, 'Times New Roman', Times, serif;
+
+  /* TODO P-114 — neutral geometric sans placeholder for body copy. Replace with the real body
+     typeface when it arrives. */
+  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+
+  /* Spacing and radius are not brand-dependent — safe to keep as-is after reskinning. */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.5rem;
+  --space-5: 4rem;
+  --space-6: 6rem;
+  --radius-card: 4px;
+  --radius-control: 2px;
+  --max-width: 72rem;
+}

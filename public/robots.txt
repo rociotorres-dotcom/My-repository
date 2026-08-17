@@ -1,0 +1,3 @@
+# TODO: remove at real public launch — this page is internal-preview only for now
+User-agent: *
+Disallow: /

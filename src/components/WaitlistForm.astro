@@ -1,0 +1,144 @@
+---
+interface Props {
+  instanceId: string;
+}
+
+const { instanceId } = Astro.props;
+---
+
+<div class="waitlist-form" data-waitlist-form data-instance-id={instanceId}>
+	<form class="waitlist-form__form">
+		<label class="waitlist-form__field">
+			<span>First name</span>
+			<input type="text" name="firstName" required autocomplete="given-name" />
+		</label>
+		<label class="waitlist-form__field">
+			<span>Email</span>
+			<input type="email" name="email" required autocomplete="email" />
+		</label>
+		<label class="waitlist-form__field waitlist-form__field--optional">
+			<span>The one thing about your home that's hardest to keep track of <em>(optional)</em></span>
+			<input type="text" name="topProblem" />
+		</label>
+		<button type="submit">Join the waitlist</button>
+	</form>
+	<div class="waitlist-form__success" hidden>
+		<!--
+			TODO: this is a placeholder message, not the real copy. Submissions are
+			NOT persisted anywhere yet (analytics.ts is a no-op — see P-004/P-117).
+			Telling a real visitor "you're on the list" right now would be a false
+			promise. Revert to "You're on the list. We'll be in touch." only once
+			analytics.ts actually saves the signup somewhere.
+		-->
+		<p>Preview only — signups aren't being saved yet.</p>
+	</div>
+</div>
+
+<style>
+	.waitlist-form {
+		background: var(--color-surface-alt);
+		border-radius: var(--radius-card);
+		padding: var(--space-3);
+		width: 100%;
+		max-width: 26rem;
+	}
+
+	.waitlist-form__form {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2);
+	}
+
+	.waitlist-form__field {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+		font-size: 0.875rem;
+	}
+
+	.waitlist-form__field em {
+		opacity: 0.7;
+		font-style: normal;
+	}
+
+	.waitlist-form__field input {
+		background: var(--color-bg);
+		border: 1px solid color-mix(in srgb, var(--color-text-body) 25%, transparent);
+		border-radius: var(--radius-control);
+		color: var(--color-text-body);
+		padding: 0.65rem 0.75rem;
+		font-size: 1rem;
+	}
+
+	.waitlist-form__field input:focus {
+		outline: 2px solid var(--color-accent-strong);
+		outline-offset: 1px;
+	}
+
+	.waitlist-form__form button {
+		background: var(--color-accent-strong);
+		border: none;
+		border-radius: var(--radius-control);
+		color: var(--color-bg);
+		cursor: pointer;
+		font-size: 1rem;
+		font-weight: 600;
+		padding: 0.85rem 1.5rem;
+		margin-top: var(--space-1);
+	}
+
+	.waitlist-form__form button:hover {
+		filter: brightness(1.08);
+	}
+
+	.waitlist-form__success p {
+		font-size: 1.1rem;
+	}
+</style>
+
+<script>
+	import { trackWaitlistSignup } from '../lib/analytics';
+
+	const STORAGE_KEY = 'gnome:waitlist-signed-up';
+	const EVENT_NAME = 'waitlist:signed_up';
+
+	function getUtmSource(): string {
+		return new URLSearchParams(window.location.search).get('utm_source') ?? '';
+	}
+
+	function showSuccess(root: ParentNode) {
+		const form = root.querySelector<HTMLFormElement>('.waitlist-form__form');
+		const success = root.querySelector<HTMLElement>('.waitlist-form__success');
+		if (form) form.hidden = true;
+		if (success) success.hidden = false;
+	}
+
+	function applyStoredState() {
+		if (localStorage.getItem(STORAGE_KEY) !== 'true') return;
+		document.querySelectorAll('[data-waitlist-form]').forEach(showSuccess);
+	}
+
+	document.querySelectorAll<HTMLElement>('[data-waitlist-form]').forEach((root) => {
+		const form = root.querySelector<HTMLFormElement>('.waitlist-form__form');
+		form?.addEventListener('submit', (event) => {
+			event.preventDefault();
+			const data = new FormData(form);
+
+			trackWaitlistSignup({
+				firstName: String(data.get('firstName') ?? '').trim(),
+				email: String(data.get('email') ?? '').trim(),
+				topProblem: String(data.get('topProblem') ?? '').trim(),
+				source: getUtmSource(),
+			});
+
+			localStorage.setItem(STORAGE_KEY, 'true');
+			document.dispatchEvent(new CustomEvent(EVENT_NAME));
+		});
+	});
+
+	document.addEventListener(EVENT_NAME, () => {
+		document.querySelectorAll('[data-waitlist-form]').forEach(showSuccess);
+	});
+
+	applyStoredState();
+</script>

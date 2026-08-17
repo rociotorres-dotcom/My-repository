@@ -1,0 +1,5 @@
+<!-- TODO P-114: provisional typographic favicon, not the final Gnome logo. Replace when Together Agency delivers brand assets. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="4" fill="#0e0e0e" />
+  <text x="16" y="23" font-family="Georgia, 'Times New Roman', serif" font-size="20" font-style="italic" fill="#ff595a" text-anchor="middle">G</text>
+</svg>
