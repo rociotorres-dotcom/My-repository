@@ -32,10 +32,10 @@ const variants = [
 		border-radius: 4px;
 		color: var(--color-text-body);
 		opacity: 0.6;
-		font-family: var(--font-body);
+		font-family: var(--font-mono);
 		font-size: 0.625rem;
-		font-weight: 700;
-		letter-spacing: 0.08em;
+		font-weight: 500;
+		letter-spacing: 0.14em;
 		text-transform: uppercase;
 		padding: 0.35rem 0.65rem;
 		cursor: pointer;
@@ -48,9 +48,10 @@ const variants = [
 		background: color-mix(in srgb, var(--color-text-body) 6%, transparent);
 	}
 
+	/* Ink, not orange — orange stays reserved for the single primary action (submit). */
 	.variant-btn.active {
-		background: var(--color-accent-strong);
-		color: var(--color-bg);
+		background: var(--color-text-body);
+		color: var(--color-surface-alt);
 		opacity: 1;
 	}
 

@@ -67,28 +67,30 @@ const feedbackTypes = ['Suggestion', 'Bug', 'Question'];
 		z-index: 200;
 	}
 
+	/* Secondary/bordered on purpose, same reasoning as .nav-cta — orange stays reserved
+	   for the waitlist submit buttons, the actual primary action on this page. */
 	.feedback-widget__trigger {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
-		background: var(--color-accent-strong);
-		color: var(--color-bg);
-		border: none;
-		border-radius: 6px;
-		font-family: var(--font-body);
+		background: var(--color-surface-alt);
+		border: 1.5px solid var(--wo-border);
+		color: var(--color-text-body);
+		border-radius: var(--radius-control);
+		font-family: var(--font-mono);
 		font-size: 0.75rem;
-		font-weight: 700;
+		font-weight: 500;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
-		padding: 0.65rem 1rem;
+		padding: calc(0.65rem - 1.5px) calc(1rem - 1.5px);
 		cursor: pointer;
-		box-shadow: 0 4px 16px color-mix(in srgb, var(--color-accent-strong) 35%, transparent);
-		transition: filter 0.2s, transform 0.15s;
+		box-shadow: var(--shadow-shell);
+		transition: border-color 0.2s, color 0.2s;
 	}
 
 	.feedback-widget__trigger:hover {
-		filter: brightness(1.08);
-		transform: translateY(-2px);
+		border-color: var(--color-accent-strong);
+		color: var(--wo-accent-ink);
 	}
 
 	.feedback-widget__panel {
@@ -97,9 +99,9 @@ const feedbackTypes = ['Suggestion', 'Bug', 'Question'];
 		right: 0;
 		width: 20rem;
 		background: var(--color-surface-alt);
-		border: 1px solid color-mix(in srgb, var(--color-text-body) 15%, transparent);
-		border-radius: 10px;
-		box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+		border: 1px solid var(--wo-border);
+		border-radius: var(--radius-card);
+		box-shadow: var(--shadow-shell);
 		overflow: hidden;
 	}
 
@@ -108,14 +110,13 @@ const feedbackTypes = ['Suggestion', 'Bug', 'Question'];
 		align-items: center;
 		justify-content: space-between;
 		padding: 1rem 1.1rem 0.75rem;
-		border-bottom: 1px solid color-mix(in srgb, var(--color-text-body) 15%, transparent);
+		border-bottom: 1px solid var(--wo-border);
 	}
 
 	.feedback-widget__title {
 		font-size: 0.8125rem;
-		font-weight: 700;
-		letter-spacing: 0.05em;
-		text-transform: uppercase;
+		font-weight: 600;
+		letter-spacing: 0.02em;
 	}
 
 	.feedback-widget__close {
@@ -147,11 +148,12 @@ const feedbackTypes = ['Suggestion', 'Bug', 'Question'];
 	}
 
 	.feedback-widget__label {
+		font-family: var(--font-mono);
 		font-size: 0.625rem;
-		font-weight: 700;
-		letter-spacing: 0.1em;
+		font-weight: 500;
+		letter-spacing: 0.14em;
 		text-transform: uppercase;
-		opacity: 0.75;
+		color: var(--wo-muted);
 		display: flex;
 		align-items: center;
 		gap: 0.4rem;
@@ -162,7 +164,7 @@ const feedbackTypes = ['Suggestion', 'Bug', 'Question'];
 	}
 
 	.feedback-widget__req {
-		color: var(--color-accent-strong);
+		color: var(--wo-accent-ink);
 	}
 
 	.feedback-widget__type-row {
@@ -181,11 +183,10 @@ const feedbackTypes = ['Suggestion', 'Bug', 'Question'];
 		display: inline-block;
 		font-size: 0.6875rem;
 		font-weight: 600;
-		color: var(--color-text-body);
-		opacity: 0.75;
+		color: var(--wo-muted);
 		padding: 0.35rem 0.65rem;
-		border: 1px solid color-mix(in srgb, var(--color-text-body) 20%, transparent);
-		border-radius: 4px;
+		border: 1px solid var(--wo-border);
+		border-radius: var(--radius-pill);
 		cursor: pointer;
 		white-space: nowrap;
 		transition: 0.15s;
@@ -194,47 +195,46 @@ const feedbackTypes = ['Suggestion', 'Bug', 'Question'];
 	.feedback-widget__type-option input:checked + span {
 		background: color-mix(in srgb, var(--color-accent-strong) 12%, transparent);
 		border-color: var(--color-accent-strong);
-		color: var(--color-accent-strong);
+		color: var(--wo-accent-ink);
 		opacity: 1;
 	}
 
 	.feedback-widget__field input,
 	.feedback-widget__field textarea {
-		background: var(--color-bg);
-		border: 1px solid color-mix(in srgb, var(--color-text-body) 20%, transparent);
-		border-radius: 5px;
+		background: var(--wo-sunken);
+		border: 1px solid var(--wo-border);
+		border-radius: var(--radius-control);
 		color: var(--color-text-body);
 		padding: 0.55rem 0.75rem;
 		font-family: var(--font-body);
 		font-size: 0.8125rem;
 		outline: none;
-		transition: border-color 0.2s, box-shadow 0.2s;
+		transition: border-color 0.2s;
 	}
 
 	.feedback-widget__field input:focus,
 	.feedback-widget__field textarea:focus {
 		border-color: var(--color-accent-strong);
-		box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent-strong) 12%, transparent);
+		border-width: 1.5px;
 	}
 
 	.feedback-widget__submit {
 		background: var(--color-accent-strong);
 		border: none;
-		border-radius: 5px;
-		color: var(--color-bg);
+		border-radius: var(--radius-control);
+		color: var(--wo-on-accent);
 		font-family: var(--font-body);
-		font-size: 0.75rem;
-		font-weight: 700;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
+		font-size: 0.875rem;
+		font-weight: 600;
+		min-height: 44px;
 		padding: 0.65rem;
 		cursor: pointer;
 		align-self: stretch;
-		transition: filter 0.2s;
+		transition: background 0.2s;
 	}
 
 	.feedback-widget__submit:hover {
-		filter: brightness(1.08);
+		background: var(--wo-accent-hover);
 	}
 
 	.feedback-widget__confirmation {
@@ -246,7 +246,7 @@ const feedbackTypes = ['Suggestion', 'Bug', 'Question'];
 	}
 
 	.feedback-widget__success-mark {
-		color: var(--color-accent-strong);
+		color: var(--wo-fern);
 		font-size: 1.25rem;
 		font-weight: 700;
 	}

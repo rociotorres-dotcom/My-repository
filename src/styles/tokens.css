@@ -1,47 +1,67 @@
 /*
   Design tokens — Gnome waitlist landing.
 
-  PROVISIONAL. Every value below is sampled by eye from the Together Agency
-  brand strategy deck (Aug 2026), not an official spec. Together Agency has
-  not delivered real hex codes, typefaces, or a logo yet (blocked on P-114).
+  "Warm Operator" — approved direction (Claude Design handoff, 2026-08-18, D-123).
+  Source of truth: context/gnome-warm-operator-design-system.md. This is the
+  client-chosen palette from the 2026-08-18 session — it REPLACES the dark
+  provisional palette sampled by eye from the Together Agency deck.
 
-  This file exists so that when the real assets arrive, reskinning the page
-  is "edit this file" and nothing else. Do not hardcode any of these values
-  anywhere outside this file.
+  Still true: Together Agency owns the final brand design (logo, and possibly
+  a different palette/type in "a few weeks" — see P-114). This is Claude
+  Design's approved interim direction, not Together Agency's delivery.
+
+  Copied close to verbatim from the design system doc's token block, with our
+  existing space scale and --max-width kept alongside (not brand-dependent).
 */
 
 :root {
-  /* TODO P-114 — near-black background, sampled from deck slide backgrounds. Not an official hex. */
-  --color-bg: #0e0e0e;
+  /* surfaces */
+  --color-bg: #efeae0; /* app background */
+  --color-surface-alt: #f7f4ee; /* cards, panels — never pure white */
+  --wo-sunken: #ede7db; /* inputs, wells */
+  --wo-border: #e1dacc; /* 1px hairline */
 
-  /* TODO P-114 — warm blush/tan accent, sampled from deck. Not an official hex. */
-  --color-accent-warm: #d5b49e;
+  /* ink */
+  --color-text-body: #16161a; /* all headings + body — never pure black */
+  --wo-text-soft: #524d45; /* long-form body */
+  --wo-muted: #8b8377; /* labels, captions */
+  --wo-on-dark: #f7f4ee;
 
-  /* TODO P-114 — off-white body text, sampled from deck. Not an official hex. */
-  --color-text-body: #e2ddd8;
+  /* brand */
+  --color-accent-strong: #e0742f; /* primary action ONLY — one per view */
+  --wo-accent-hover: #c9622a;
+  --wo-accent-ink: #b4552e; /* orange as TEXT — raw accent fails contrast on cream */
+  --wo-on-accent: #fff6ec; /* text on top of solid accent */
+  --wo-fern: #2f5d50; /* money, health, positive deltas */
+  --color-accent-warm: #dcc9a8; /* straw — chips, historical bars */
+  --wo-alert: #a03328; /* overdue, destructive — never a red background */
 
-  /* TODO P-114 — warm grey alt surface (cards, dividers), sampled from deck. Not an official hex. */
-  --color-surface-alt: #605c5e;
+  /* type */
+  --font-body: 'Hanken Grotesk', Helvetica, sans-serif; /* licensed upgrade: Aeonik */
+  --font-display: 'Instrument Serif', Georgia, serif; /* one aside per view — this carries the warmth */
+  --font-mono: 'DM Mono', monospace; /* licensed upgrade: Söhne Mono */
+  --wo-track-display: -0.035em;
 
-  /* TODO P-114 — coral strong accent (borders, CTA emphasis), sampled from deck. Not an official hex. */
-  --color-accent-strong: #ff595a;
+  /* geometry */
+  --radius-shell: 20px;
+  --radius-card: 14px;
+  --radius-inner: 10px;
+  --radius-control: 10px;
+  --radius-pill: 999px;
+  --shadow-shell: 0 18px 44px rgba(22, 22, 26, 0.1);
 
-  /* TODO P-114 — high-contrast display serif placeholder. Together Agency will deliver the real
-     display typeface; this system stack is a stand-in with the right contrast/weight character. */
-  --font-display: Georgia, 'Times New Roman', Times, serif;
+  /* motion */
+  --ease-standard: cubic-bezier(0.2, 0, 0.2, 1);
+  --dur-hover: 120ms;
+  --dur-enter: 180ms;
+  --dur-count: 600ms;
 
-  /* TODO P-114 — neutral geometric sans placeholder for body copy. Replace with the real body
-     typeface when it arrives. */
-  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-
-  /* Spacing and radius are not brand-dependent — safe to keep as-is after reskinning. */
+  /* Layout rhythm — not brand-dependent, kept as-is across reskins. */
   --space-1: 0.5rem;
   --space-2: 1rem;
   --space-3: 1.5rem;
   --space-4: 2.5rem;
   --space-5: 4rem;
   --space-6: 6rem;
-  --radius-card: 4px;
-  --radius-control: 2px;
   --max-width: 72rem;
 }
