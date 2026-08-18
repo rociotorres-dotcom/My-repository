@@ -8,37 +8,42 @@ const { instanceId } = Astro.props;
 
 <div class="waitlist-form" data-waitlist-form data-instance-id={instanceId}>
 	<form class="waitlist-form__form">
+		<div class="waitlist-form__row">
+			<label class="waitlist-form__field">
+				<span>First name <em class="waitlist-form__req" aria-hidden="true">*</em></span>
+				<input type="text" name="firstName" required autocomplete="given-name" />
+			</label>
+			<label class="waitlist-form__field">
+				<span>Email <em class="waitlist-form__req" aria-hidden="true">*</em></span>
+				<input type="email" name="email" required autocomplete="email" />
+			</label>
+		</div>
 		<label class="waitlist-form__field">
-			<span>First name</span>
-			<input type="text" name="firstName" required autocomplete="given-name" />
+			<span
+				>What's the one thing about your home that's hardest to keep track of
+				<em class="waitlist-form__optional">optional</em></span
+			>
+			<textarea name="topProblem" rows="3"></textarea>
 		</label>
-		<label class="waitlist-form__field">
-			<span>Email</span>
-			<input type="email" name="email" required autocomplete="email" />
-		</label>
-		<label class="waitlist-form__field waitlist-form__field--optional">
-			<span>The one thing about your home that's hardest to keep track of <em>(optional)</em></span>
-			<input type="text" name="topProblem" />
-		</label>
-		<button type="submit">Join the waitlist</button>
+		<button type="submit">
+			<span>Join the waitlist</span>
+			<span class="waitlist-form__arrow" aria-hidden="true">→</span>
+		</button>
 	</form>
 	<div class="waitlist-form__success" hidden>
+		<span class="waitlist-form__success-mark" aria-hidden="true">✓</span>
 		<!--
-			TODO: this is a placeholder message, not the real copy. Submissions are
-			NOT persisted anywhere yet (analytics.ts is a no-op — see P-004/P-117).
-			Telling a real visitor "you're on the list" right now would be a false
-			promise. Revert to "You're on the list. We'll be in touch." only once
-			analytics.ts actually saves the signup somewhere.
+			TODO: this is preview/demo copy, not the final copy. Submissions are NOT
+			persisted anywhere yet (analytics.ts is a no-op — see P-004/P-117). Revert
+			to "You're on the list. We'll be in touch." only once analytics.ts actually
+			saves the signup somewhere.
 		-->
-		<p>Preview only — signups aren't being saved yet.</p>
+		<p>You're previewing Gnome early. The real thing comes next.</p>
 	</div>
 </div>
 
 <style>
 	.waitlist-form {
-		background: var(--color-surface-alt);
-		border-radius: var(--radius-card);
-		padding: var(--space-3);
 		width: 100%;
 		max-width: 26rem;
 	}
@@ -46,60 +51,147 @@ const { instanceId } = Astro.props;
 	.waitlist-form__form {
 		display: flex;
 		flex-direction: column;
-		gap: var(--space-2);
+		gap: 1rem;
+		width: 100%;
+	}
+
+	.waitlist-form__row {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1rem;
+	}
+
+	@media (max-width: 31.25rem) {
+		.waitlist-form__row {
+			grid-template-columns: 1fr;
+		}
 	}
 
 	.waitlist-form__field {
 		display: flex;
 		flex-direction: column;
-		gap: 0.35rem;
-		font-size: 0.875rem;
+		gap: 0.5rem;
 	}
 
-	.waitlist-form__field em {
-		opacity: 0.7;
+	.waitlist-form__field > span {
+		font-size: 0.6875rem;
+		font-weight: 700;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--color-text-body);
+		opacity: 0.75;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.waitlist-form__req {
+		color: var(--color-accent-strong);
 		font-style: normal;
 	}
 
-	.waitlist-form__field input {
-		background: var(--color-bg);
-		border: 1px solid color-mix(in srgb, var(--color-text-body) 25%, transparent);
-		border-radius: var(--radius-control);
-		color: var(--color-text-body);
-		padding: 0.65rem 0.75rem;
-		font-size: 1rem;
+	.waitlist-form__optional {
+		font-size: 0.625rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		font-style: normal;
+		color: var(--color-accent-strong);
+		background: color-mix(in srgb, var(--color-accent-strong) 12%, transparent);
+		border: 1px solid color-mix(in srgb, var(--color-accent-strong) 35%, transparent);
+		padding: 0.125rem 0.5rem;
+		border-radius: 3px;
 	}
 
-	.waitlist-form__field input:focus {
-		outline: 2px solid var(--color-accent-strong);
-		outline-offset: 1px;
+	.waitlist-form__field input,
+	.waitlist-form__field textarea {
+		background: var(--color-surface-alt);
+		border: 1px solid color-mix(in srgb, var(--color-text-body) 15%, transparent);
+		border-radius: 6px;
+		color: var(--color-text-body);
+		font-family: var(--font-body);
+		font-size: 0.875rem;
+		padding: 0.7rem 0.9rem;
+		outline: none;
+		width: 100%;
+		transition: border-color 0.2s, box-shadow 0.2s;
+	}
+
+	.waitlist-form__field input::placeholder,
+	.waitlist-form__field textarea::placeholder {
+		color: color-mix(in srgb, var(--color-text-body) 45%, transparent);
+	}
+
+	.waitlist-form__field input:focus,
+	.waitlist-form__field textarea:focus {
+		border-color: var(--color-accent-strong);
+		box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent-strong) 15%, transparent);
+	}
+
+	.waitlist-form__field textarea {
+		resize: vertical;
+		min-height: 5rem;
 	}
 
 	.waitlist-form__form button {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.6rem;
 		background: var(--color-accent-strong);
-		border: none;
-		border-radius: var(--radius-control);
 		color: var(--color-bg);
+		border: none;
+		border-radius: 6px;
+		font-family: var(--font-body);
+		font-size: 0.8125rem;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		padding: 0.8rem 1.5rem;
 		cursor: pointer;
-		font-size: 1rem;
-		font-weight: 600;
-		padding: 0.85rem 1.5rem;
-		margin-top: var(--space-1);
+		align-self: flex-start;
+		transition: background 0.2s, transform 0.15s;
 	}
 
 	.waitlist-form__form button:hover {
 		filter: brightness(1.08);
+		transform: translateY(-1px);
 	}
 
-	.waitlist-form__success p {
-		font-size: 1.1rem;
+	.waitlist-form__arrow {
+		font-size: 1rem;
+		transition: transform 0.2s;
+	}
+
+	.waitlist-form__form button:hover .waitlist-form__arrow {
+		transform: translateX(3px);
+	}
+
+	.waitlist-form__success {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 1rem 1.25rem;
+		background: var(--color-surface-alt);
+		border-left: 3px solid var(--color-accent-strong);
+		border-radius: 6px;
+		font-size: 0.95rem;
+	}
+
+	.waitlist-form__success-mark {
+		color: var(--color-accent-strong);
+		font-size: 1.15rem;
+		font-weight: 700;
 	}
 </style>
 
 <script>
 	import { trackWaitlistSignup } from '../lib/analytics';
 
-	const STORAGE_KEY = 'gnome:waitlist-signed-up';
+	// TODO P-004 / P-117: no localStorage persistence on purpose — this is a preview/demo
+	// page being compared internally, not a live waitlist. Persisting "already signed up"
+	// across visits would mean anyone who submits once (a reviewer, a manager) can never
+	// see the form again. Bring persistence back once there's a real backend that actually
+	// saves signups — at that point it stops being a UX inconvenience and starts being correct.
 	const EVENT_NAME = 'waitlist:signed_up';
 
 	function getUtmSource(): string {
@@ -111,11 +203,6 @@ const { instanceId } = Astro.props;
 		const success = root.querySelector<HTMLElement>('.waitlist-form__success');
 		if (form) form.hidden = true;
 		if (success) success.hidden = false;
-	}
-
-	function applyStoredState() {
-		if (localStorage.getItem(STORAGE_KEY) !== 'true') return;
-		document.querySelectorAll('[data-waitlist-form]').forEach(showSuccess);
 	}
 
 	document.querySelectorAll<HTMLElement>('[data-waitlist-form]').forEach((root) => {
@@ -131,7 +218,6 @@ const { instanceId } = Astro.props;
 				source: getUtmSource(),
 			});
 
-			localStorage.setItem(STORAGE_KEY, 'true');
 			document.dispatchEvent(new CustomEvent(EVENT_NAME));
 		});
 	});
@@ -139,6 +225,4 @@ const { instanceId } = Astro.props;
 	document.addEventListener(EVENT_NAME, () => {
 		document.querySelectorAll('[data-waitlist-form]').forEach(showSuccess);
 	});
-
-	applyStoredState();
 </script>

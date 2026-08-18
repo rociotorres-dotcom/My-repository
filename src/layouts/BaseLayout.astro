@@ -30,6 +30,21 @@ const {
 		<meta property="og:description" content={description} />
 
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+		<script is:inline>
+			// Applies the stored layout variant before first paint, mobile-aware, to avoid
+			// a flash of the wrong layout. Mirrors the runtime logic in VariantSwitcher.astro.
+			(function () {
+				var MOBILE_BP = 600;
+				try {
+					var stored = localStorage.getItem('gnome:landing-variant') || 'center-stage';
+					var effective = window.innerWidth <= MOBILE_BP ? 'center-stage' : stored;
+					document.documentElement.setAttribute('data-variant', effective);
+				} catch (e) {
+					document.documentElement.setAttribute('data-variant', 'center-stage');
+				}
+			})();
+		</script>
 	</head>
 	<body>
 		<slot />
@@ -39,6 +54,10 @@ const {
 <style is:global>
 	* {
 		box-sizing: border-box;
+	}
+
+	[hidden] {
+		display: none !important;
 	}
 
 	html,
@@ -53,6 +72,9 @@ const {
 		font-family: var(--font-body);
 		line-height: 1.5;
 		-webkit-font-smoothing: antialiased;
+		min-height: 100vh;
+		position: relative;
+		overflow-x: hidden;
 	}
 
 	h1,

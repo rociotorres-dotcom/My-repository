@@ -1,0 +1,96 @@
+---
+const variants = [
+	{ value: 'center-stage', label: 'Center Stage' },
+	{ value: 'side-by-side', label: 'Side by Side' },
+	{ value: 'split', label: 'Split' },
+];
+---
+
+<div id="variant-switcher" role="group" aria-label="Layout variants">
+	{
+		variants.map((variant) => (
+			<button class="variant-btn" data-variant={variant.value}>
+				{variant.label}
+			</button>
+		))
+	}
+</div>
+
+<style>
+	#variant-switcher {
+		display: flex;
+		gap: 2px;
+		background: color-mix(in srgb, var(--color-text-body) 6%, transparent);
+		border: 1px solid color-mix(in srgb, var(--color-text-body) 8%, transparent);
+		border-radius: 6px;
+		padding: 3px;
+	}
+
+	.variant-btn {
+		background: none;
+		border: none;
+		border-radius: 4px;
+		color: var(--color-text-body);
+		opacity: 0.6;
+		font-family: var(--font-body);
+		font-size: 0.625rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		padding: 0.35rem 0.65rem;
+		cursor: pointer;
+		white-space: nowrap;
+		transition: background 0.15s, color 0.15s, opacity 0.15s;
+	}
+
+	.variant-btn:hover:not(.active) {
+		opacity: 1;
+		background: color-mix(in srgb, var(--color-text-body) 6%, transparent);
+	}
+
+	.variant-btn.active {
+		background: var(--color-accent-strong);
+		color: var(--color-bg);
+		opacity: 1;
+	}
+
+	@media (max-width: 37.5rem) {
+		#variant-switcher {
+			display: none;
+		}
+	}
+</style>
+
+<script>
+	const STORAGE_KEY = 'gnome:landing-variant';
+	const MOBILE_BP = 600;
+
+	const switcher = document.getElementById('variant-switcher');
+	if (switcher) {
+		const buttons = switcher.querySelectorAll<HTMLButtonElement>('.variant-btn');
+
+		function isMobile() {
+			return window.innerWidth <= MOBILE_BP;
+		}
+
+		function applyVariant(name: string, fromClick?: boolean) {
+			const effective = isMobile() ? 'center-stage' : name;
+			document.documentElement.setAttribute('data-variant', effective);
+			buttons.forEach((btn) => {
+				btn.classList.toggle('active', btn.dataset.variant === effective);
+			});
+			if (!isMobile()) localStorage.setItem(STORAGE_KEY, name);
+			if (fromClick) window.scrollTo({ top: 0, behavior: 'smooth' });
+		}
+
+		applyVariant(localStorage.getItem(STORAGE_KEY) || 'center-stage');
+
+		buttons.forEach((btn) => {
+			btn.addEventListener('click', () => applyVariant(btn.dataset.variant || 'center-stage', true));
+		});
+
+		window.addEventListener('resize', () => {
+			applyVariant(localStorage.getItem(STORAGE_KEY) || 'center-stage');
+		});
+	}
+</script>
