@@ -1,0 +1,167 @@
+---
+// Shared blurred-photo carousel — same 4 images/phrases everywhere it's used (hero
+// band, the two decorative slots that used to hold abstract SVG graphics). PO
+// direction 2026-08-19: knowingly overrides the "no literal house icons" guardrail
+// in context/gnome-warm-operator-design-system.md for these image slots only (four
+// stock images, each with a house model/shape as the subject — not yet licensed,
+// same open item as the rest of the imagery work). `showPhrase` is off for the
+// smallest slot (bottom CTA) — there isn't room for legible text at that size.
+interface Props {
+  id: string;
+  variant: 'hero' | 'band' | 'bottom';
+  showPhrase?: boolean;
+}
+
+const { id, variant, showPhrase = true } = Astro.props;
+
+const slides = [
+  { src: '/carousel-1.1.webp', phrase: 'Every receipt, every repair — one record that protects your value.' },
+  { src: '/carousel-1.4.jpeg', phrase: 'Know your home the way you know your portfolio.' },
+  { src: '/carousel-1.3.jpeg', phrase: "The upkeep you've already done, finally worth something." },
+  { src: '/carousel-1.2.webp', phrase: 'One place for the whole story of your home.' },
+];
+---
+
+<div class={`img-carousel img-carousel--${variant}`} id={id} aria-hidden="true">
+	{
+		slides.map((slide, i) => (
+			<div class={`carousel-slide ${i === 0 ? 'is-active' : ''}`} style={`background-image: url('${slide.src}');`}>
+				<div class="carousel-overlay" />
+				{showPhrase && <p class="carousel-phrase">{slide.phrase}</p>}
+			</div>
+		))
+	}
+
+	<div class="carousel-dots" role="tablist" aria-label="Image carousel">
+		{slides.map((_, i) => <button class={`carousel-dot ${i === 0 ? 'is-active' : ''}`} data-index={i} aria-label={`Slide ${i + 1}`} />)}
+	</div>
+</div>
+
+<style>
+	/* Blurred-photo carousel — PO override of the "no literal house icons" guardrail
+	   in context/gnome-warm-operator-design-system.md (2026-08-19), made knowingly.
+	   Flat dark overlay, not a gradient. Sizing/shape differ per instance via the
+	   variant modifiers below — same markup and script everywhere it's used. */
+	.img-carousel {
+		position: relative;
+		overflow: hidden;
+		background: var(--color-text-body);
+	}
+
+	.img-carousel--hero {
+		width: 100%;
+		margin-top: 3.25rem;
+		min-height: 22rem;
+	}
+
+	.img-carousel--band {
+		width: 100%;
+		aspect-ratio: 21 / 9;
+		border-radius: var(--radius-shell);
+		border: 1px solid var(--wo-border);
+	}
+
+	.img-carousel--bottom {
+		width: 12rem;
+		aspect-ratio: 4 / 3;
+		margin-top: 0.5rem;
+		border-radius: var(--radius-card);
+		border: 1px solid var(--wo-border);
+	}
+
+	.img-carousel--band .carousel-phrase {
+		font-size: clamp(0.9375rem, 2.4vw, 1.1875rem);
+		max-width: 26rem;
+	}
+
+	.img-carousel--band .carousel-dots,
+	.img-carousel--bottom .carousel-dots {
+		bottom: 0.75rem;
+	}
+
+	.img-carousel--bottom .carousel-dot {
+		width: 0.375rem;
+		height: 0.375rem;
+	}
+
+	.carousel-slide {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-size: cover;
+		background-position: center;
+		opacity: 0;
+		transition: opacity 900ms var(--ease-standard);
+	}
+
+	.carousel-slide.is-active {
+		opacity: 1;
+	}
+
+	.carousel-slide::before {
+		content: '';
+		position: absolute;
+		inset: -20px;
+		filter: blur(22px);
+		background-size: cover;
+		background-position: center;
+		background-image: inherit;
+	}
+
+	.carousel-overlay {
+		position: absolute;
+		inset: 0;
+		background: rgba(22, 22, 26, 0.58);
+	}
+
+	.carousel-phrase {
+		position: relative;
+		z-index: 1;
+		max-width: 40rem;
+		text-align: center;
+		color: var(--wo-on-dark);
+		font-family: var(--font-body);
+		font-weight: 700;
+		font-size: clamp(1.25rem, 3vw, 1.875rem);
+		line-height: 1.3;
+		letter-spacing: var(--wo-track-display);
+		padding: 0 1.5rem;
+	}
+
+	.carousel-dots {
+		position: absolute;
+		z-index: 2;
+		bottom: 1.25rem;
+		left: 50%;
+		transform: translateX(-50%);
+		display: flex;
+		gap: 0.5rem;
+	}
+
+	.carousel-dot {
+		width: 0.5rem;
+		height: 0.5rem;
+		border-radius: var(--radius-pill);
+		border: none;
+		background: rgba(247, 244, 238, 0.4);
+		padding: 0;
+		cursor: pointer;
+		transition: background 0.2s;
+	}
+
+	.carousel-dot.is-active {
+		background: var(--color-accent-strong);
+	}
+
+	@media (max-width: 37.5rem) {
+		.img-carousel--hero {
+			min-height: 18rem;
+		}
+
+		.img-carousel--bottom {
+			width: 10rem;
+		}
+	}
+</style>

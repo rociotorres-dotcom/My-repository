@@ -8,6 +8,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import WaitlistForm from '../components/WaitlistForm.astro';
 import FeedbackWidget from '../components/FeedbackWidget.astro';
 import VariantSwitcher from '../components/VariantSwitcher.astro';
+import ImageCarousel from '../components/ImageCarousel.astro';
 
 const year = new Date().getFullYear();
 ---
@@ -23,6 +24,16 @@ const year = new Date().getFullYear();
 		</div>
 		<a href="#waitlist-hero" class="nav-cta">Join the waitlist <span aria-hidden="true">→</span></a>
 	</nav>
+
+	<!--
+		PO direction 2026-08-19: heavily blurred background photography behind rotating
+		phrases, explicitly overriding the "no literal house icons" guardrail from
+		context/gnome-warm-operator-design-system.md — the PO's call, made knowingly
+		(four stock images, each with a house model/shape as the subject, not yet
+		licensed). 2026-08-19 follow-up: same carousel reused (small, contained) in the
+		two slots below that used to hold abstract SVG graphics — see ImageCarousel.astro.
+	-->
+	<ImageCarousel id="carousel-hero" variant="hero" />
 
 	<div class="page">
 		<main class="hero">
@@ -50,44 +61,7 @@ const year = new Date().getFullYear();
 	</div>
 
 	<section class="visual-band">
-		<!--
-			Original abstract composition, not photography — homer.co and the two stock
-			samples we rejected are both photo-led, but we have no licensed photo yet
-			(P-114/imagery still open). This is a from-scratch, minimalist line
-			illustration built only from the Warm Operator tokens: no gradients, no
-			glow, no literal house shape, no mascot. It reads as "organized records +
-			value moving up," which is the actual promise of the page. Swap for real
-			photography later if/when a licensed asset exists — this is not a
-			placeholder, it can ship as-is.
-		-->
-		<div class="visual-shell" aria-hidden="true">
-			<svg class="visual-graphic" viewBox="0 0 960 320" fill="none" xmlns="http://www.w3.org/2000/svg">
-				<line x1="60" y1="230" x2="900" y2="230" class="graphic-baseline" />
-				<polyline
-					points="60,205 220,205 220,175 380,175 380,140 540,140 540,100 700,100 700,60 900,60"
-					class="graphic-trend"
-				/>
-				<circle cx="220" cy="175" r="4" class="graphic-trend-dot" />
-				<circle cx="380" cy="140" r="4" class="graphic-trend-dot" />
-				<circle cx="540" cy="100" r="4" class="graphic-trend-dot" />
-				<circle cx="700" cy="60" r="4" class="graphic-trend-dot" />
-
-				<g transform="translate(560 40) rotate(4 150 130)">
-					<rect x="0" y="0" width="300" height="180" rx="14" class="graphic-card graphic-card--straw" />
-				</g>
-				<g transform="translate(540 24) rotate(-3 150 130)">
-					<rect x="0" y="0" width="300" height="180" rx="14" class="graphic-card graphic-card--sunken" />
-				</g>
-				<g transform="translate(520 10)">
-					<rect x="0" y="0" width="300" height="180" rx="14" class="graphic-card graphic-card--surface" />
-					<rect x="28" y="28" width="56" height="14" rx="3" class="graphic-tag" />
-					<rect x="28" y="70" width="220" height="8" rx="4" class="graphic-line" />
-					<rect x="28" y="92" width="180" height="8" rx="4" class="graphic-line" />
-					<rect x="28" y="114" width="200" height="8" rx="4" class="graphic-line" />
-					<rect x="28" y="144" width="90" height="8" rx="4" class="graphic-line graphic-line--soft" />
-				</g>
-			</svg>
-		</div>
+		<ImageCarousel id="carousel-band" variant="band" />
 	</section>
 
 	<section class="features">
@@ -144,19 +118,7 @@ const year = new Date().getFullYear();
 				<h2 class="bottom-headline">Command, not chores.</h2>
 				<p class="bottom-sub">Reserve your spot. Gnome does the watching; every decision stays yours.</p>
 
-				<!-- Same abstract-graphic language as the hero band: concentric rings around
-				     a fixed center point, a mark for "value held steady, watched over" — not
-				     a shield/badge cliché, not a house shape. -->
-				<svg class="bottom-graphic" viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-					<circle cx="60" cy="60" r="46" class="bg-ring bg-ring--outer" />
-					<circle cx="60" cy="60" r="32" class="bg-ring bg-ring--mid" />
-					<circle cx="60" cy="60" r="18" class="bg-ring bg-ring--inner" />
-					<circle cx="60" cy="60" r="4" class="bg-ring-dot" />
-					<line x1="60" y1="60" x2="150" y2="30" class="bg-lead-line" />
-					<circle cx="150" cy="30" r="3" class="bg-ring-dot" />
-					<line x1="60" y1="60" x2="140" y2="95" class="bg-lead-line" />
-					<circle cx="140" cy="95" r="3" class="bg-ring-dot" />
-				</svg>
+				<ImageCarousel id="carousel-bottom" variant="bottom" showPhrase={false} />
 			</div>
 			<div class="bottom-form" id="waitlist-bottom">
 				<WaitlistForm instanceId="bottom" />
@@ -173,6 +135,45 @@ const year = new Date().getFullYear();
 
 	<FeedbackWidget />
 </BaseLayout>
+
+<script>
+	const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+	document.querySelectorAll<HTMLElement>('.img-carousel').forEach((carousel) => {
+		const slides = Array.from(carousel.querySelectorAll<HTMLElement>('.carousel-slide'));
+		const dots = Array.from(carousel.querySelectorAll<HTMLButtonElement>('.carousel-dot'));
+		let current = 0;
+		let timer: ReturnType<typeof setInterval> | undefined;
+
+		function show(index: number) {
+			current = (index + slides.length) % slides.length;
+			slides.forEach((slide, i) => slide.classList.toggle('is-active', i === current));
+			dots.forEach((dot, i) => dot.classList.toggle('is-active', i === current));
+		}
+
+		function startAutoplay() {
+			stopAutoplay();
+			timer = setInterval(() => show(current + 1), 5000);
+		}
+
+		function stopAutoplay() {
+			if (timer) clearInterval(timer);
+		}
+
+		dots.forEach((dot) => {
+			dot.addEventListener('click', () => {
+				show(Number(dot.dataset.index));
+				startAutoplay();
+			});
+		});
+
+		if (!prefersReducedMotion) {
+			startAutoplay();
+			carousel.addEventListener('mouseenter', stopAutoplay);
+			carousel.addEventListener('mouseleave', startAutoplay);
+		}
+	});
+</script>
 
 <style>
 	/* Left accent bar — fixed, full height. Matches the reference's slim brand bar. */
@@ -258,6 +259,10 @@ const year = new Date().getFullYear();
 			padding: 0.45rem 0.7rem;
 		}
 	}
+
+	/* Carousel styling lives in ImageCarousel.astro's own <style> block — Astro scopes
+	   styles per-component, so rules for markup that component renders have to live
+	   there, not here (this was the bug: these rules never matched anything before). */
 
 	.page {
 		padding-top: 3.25rem;
@@ -464,9 +469,8 @@ const year = new Date().getFullYear();
 		}
 	}
 
-	/* Original abstract graphic band — constant across all three variants, same as
-	   features/bottom-cta. Built only from tokens: straw/sunken/surface cards (no
-	   gradients), a fern trend line, ink line-art — no photography, no house shape. */
+	/* Visual band — constant across all three variants, same as features/bottom-cta.
+	   Holds the ImageCarousel "band" instance; sizing/shape lives on .img-carousel--band. */
 	.visual-band {
 		width: 100%;
 		max-width: 53.75rem;
@@ -474,74 +478,10 @@ const year = new Date().getFullYear();
 		padding: 0 calc(5px + 1.5rem) 0 1.5rem;
 	}
 
-	.visual-shell {
-		width: 100%;
-		border-radius: var(--radius-shell);
-		background: var(--color-surface-alt);
-		border: 1px solid var(--wo-border);
-		padding: 2rem 1.5rem 0;
-		overflow: hidden;
-	}
-
-	.visual-graphic {
-		width: 100%;
-		height: auto;
-		display: block;
-	}
-
-	.graphic-baseline {
-		stroke: var(--wo-border);
-		stroke-width: 1;
-	}
-
-	.graphic-trend {
-		stroke: var(--wo-fern);
-		stroke-width: 2;
-		stroke-linejoin: round;
-		stroke-linecap: round;
-	}
-
-	.graphic-trend-dot {
-		fill: var(--wo-fern);
-	}
-
-	.graphic-card {
-		stroke: var(--wo-border);
-		stroke-width: 1;
-	}
-
-	.graphic-card--straw {
-		fill: var(--color-accent-warm);
-	}
-
-	.graphic-card--sunken {
-		fill: var(--wo-sunken);
-	}
-
-	.graphic-card--surface {
-		fill: var(--color-surface-alt);
-	}
-
-	.graphic-tag {
-		fill: var(--color-accent-strong);
-	}
-
-	.graphic-line {
-		fill: var(--wo-border);
-	}
-
-	.graphic-line--soft {
-		fill: var(--wo-sunken);
-	}
-
 	@media (max-width: 37.5rem) {
 		.visual-band {
 			padding-left: calc(5px + 1rem);
 			padding-right: 1rem;
-		}
-
-		.visual-shell {
-			padding: 1.5rem 1rem 0;
 		}
 	}
 
@@ -665,40 +605,6 @@ const year = new Date().getFullYear();
 		line-height: 1.75;
 		color: var(--wo-text-soft);
 		margin-bottom: 2rem;
-	}
-
-	.bottom-graphic {
-		width: 11rem;
-		height: auto;
-		display: block;
-	}
-
-	.bg-ring {
-		stroke-width: 1;
-	}
-
-	.bg-ring--outer {
-		stroke: var(--wo-border);
-	}
-
-	.bg-ring--mid {
-		stroke: var(--color-accent-warm);
-		stroke-width: 1.5;
-	}
-
-	.bg-ring--inner {
-		stroke: var(--wo-fern);
-		stroke-width: 1.5;
-	}
-
-	.bg-ring-dot {
-		fill: var(--wo-accent-ink);
-	}
-
-	.bg-lead-line {
-		stroke: var(--wo-border);
-		stroke-width: 1;
-		stroke-dasharray: 2 3;
 	}
 
 	.site-footer {
