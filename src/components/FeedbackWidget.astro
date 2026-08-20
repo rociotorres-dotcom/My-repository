@@ -67,24 +67,27 @@ const feedbackTypes = ['Suggestion', 'Bug', 'Question'];
 		z-index: 200;
 	}
 
-	/* Secondary/bordered on purpose, same reasoning as .nav-cta — orange stays reserved
-	   for the waitlist submit buttons, the actual primary action on this page. */
+	/*
+		Matches .nav-cta exactly (PO feedback 2026-08-20: "un boton parecido al que
+		te pase... con este mismo tipo de letra") — same secondary/bordered
+		reasoning: orange stays reserved for the waitlist submit buttons, the
+		actual primary action.
+	*/
 	.feedback-widget__trigger {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
-		background: var(--color-surface-alt);
+		gap: 0.4rem;
+		background: var(--color-bg);
 		border: 1.5px solid var(--wo-border);
 		color: var(--color-text-body);
-		border-radius: var(--radius-control);
+		border-radius: 5px;
 		font-family: var(--font-mono);
-		font-size: 0.75rem;
+		font-size: 0.625rem;
 		font-weight: 500;
-		letter-spacing: 0.08em;
+		letter-spacing: 0.1em;
 		text-transform: uppercase;
-		padding: calc(0.65rem - 1.5px) calc(1rem - 1.5px);
+		padding: calc(0.55rem - 1.5px) calc(0.9rem - 1.5px);
 		cursor: pointer;
-		box-shadow: var(--shadow-shell);
 		transition: border-color 0.2s, color 0.2s;
 	}
 

@@ -22,3 +22,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Reference-only: a colleague's separate design repo, dropped in for comparison.
+# Not part of this project (own huge node_modules/.next, own git history) — never commit it.
+IQDTractionLab/

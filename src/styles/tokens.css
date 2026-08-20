@@ -16,7 +16,7 @@
 
 :root {
   /* surfaces */
-  --color-bg: #efeae0; /* app background */
+  --color-bg: #f5e8da; /* app background — soft warm orange tint, PO feedback 2026-08-20 (was reading as too plain/white) */
   --color-surface-alt: #f7f4ee; /* cards, panels — never pure white */
   --wo-sunken: #ede7db; /* inputs, wells */
   --wo-border: #e1dacc; /* 1px hairline */
@@ -35,6 +35,7 @@
   --wo-fern: #2f5d50; /* money, health, positive deltas */
   --color-accent-warm: #dcc9a8; /* straw — chips, historical bars */
   --wo-alert: #a03328; /* overdue, destructive — never a red background */
+  --wo-accent-on-dark: #e0a97f; /* accent-ink equivalent for text over a dark/photo ground — from Gerardo's prototype-web tokens (ink-serif) */
 
   /* type */
   --font-body: 'Hanken Grotesk', Helvetica, sans-serif; /* licensed upgrade: Aeonik */
